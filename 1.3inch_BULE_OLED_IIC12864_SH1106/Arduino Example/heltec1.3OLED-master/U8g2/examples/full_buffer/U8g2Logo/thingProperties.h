@@ -8,6 +8,9 @@
 
   float temp;
   float humidity;
+  bool pumping_motor;  // 抽水馬達開關，預設關
+  int wifi_rssi;       // WiFi 訊號強度 0~100%，Read Only（愈高愈強）
+  int water_sensor;    // 水位感測器類比值 0~4095，Read Only
 
   Variables which are marked as READ/WRITE in the Cloud Thing will also have functions
   which are called when their values are changed from the Dashboard.
@@ -31,9 +34,14 @@ const char PASS[]     = "0935963000";    // Network password (use for WPA, or us
 float temp;
 float humidity;
 bool LED_switch;  // 如果 Cloud 中 Declaration 是 lED_switch，請改為 bool lED_switch;
+bool pumping_motor;  // 抽水馬達開關（預設關）| ID: 40175c01-f685-4a03-95d0-afc3a250c6f0
+int wifi_rssi;      // WiFi 訊號強度 0~100%，Read Only | ID: 28ad7d28-f0fa-41df-b1e9-fbe560d9f689
+int water_sensor;  // 水位感測器類比值 0~4095，Read Only | ID: 9c6556b5-0576-4504-ad06-457a82171aca
 
 // LED 開關改變時的回調函數
 void onLEDSwitchChange();
+// 抽水馬達開關改變時的回調函數
+void onPumpingMotorChange();
 
 void initProperties(){
 
@@ -43,6 +51,9 @@ void initProperties(){
   ArduinoCloud.addProperty(temp, READ, ON_CHANGE, NULL);
   ArduinoCloud.addProperty(humidity, READ, ON_CHANGE, NULL);
   ArduinoCloud.addProperty(LED_switch, READWRITE, ON_CHANGE, onLEDSwitchChange);
+  ArduinoCloud.addProperty(pumping_motor, READWRITE, ON_CHANGE, onPumpingMotorChange);
+  ArduinoCloud.addProperty(wifi_rssi, READ, ON_CHANGE, NULL);
+  ArduinoCloud.addProperty(water_sensor, READ, ON_CHANGE, NULL);
 
 }
 
